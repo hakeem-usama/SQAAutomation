@@ -1,0 +1,77 @@
+Code2:
+package snippet;
+import java.util.Scanner;
+import java.util.ArrayList;
+public class Task2 {
+
+	public static void main(String[] args) {
+		
+		Scanner myObj = new Scanner(System.in);
+	    System.out.println("Enter Your Full Name:");
+	    String seperated="";
+	    String name= myObj.nextLine();
+	    ArrayList<String> splittedName = new ArrayList<String>();
+	    int j=0;
+	    
+	    for(int i=j;i<name.length();i++)
+	    {	    	
+	    	seperated+=name.charAt(i);
+	    	if( name.charAt(i)==' ')
+	    	{	    		
+	    		j=i+1;	    		    		
+	    	}	 
+	    	splittedName.add(seperated);
+    		seperated="";
+	    }
+	    for (int i=0; i<splittedName.size();i++)
+	    {
+	    	System.out.println((splittedName.get(i)).charAt(i));
+	    }
+	    
+
+	}
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+Code 1:
+package snippet;
+import java.util.Scanner;
+
+public class Main {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		 int randomNum = (int)(Math.random() * 101);
+		    Scanner myObj = new Scanner(System.in);
+		    System.out.println("Guess random number and enter here");
+		    float num;
+		    num = myObj.nextFloat();
+		    if (num>randomNum)
+		    {
+		    	System.out.println("The number is too large");
+		    }
+		    else if (num<randomNum)
+		    {
+		    	System.out.println("The number is too small");
+		    }
+		    else
+		    {
+		    	System.out.println("Correct Number");
+		    }
+		    System.out.println("The randomly generated number is: "+randomNum );
+
+	}
+
+}
