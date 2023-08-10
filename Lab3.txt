@@ -1,14 +1,21 @@
+package test1;
+import java.time.Duration;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
-
-public class Lab3 {
+public class test {
 	static WebDriver driver;
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -115,8 +122,98 @@ public class Lab3 {
         
         Select dropdown= new Select(driver.findElement(By.xpath("//select[@class='combobox']")));
         dropdown.selectByIndex(3);
+        boolean dropdownselected=driver.findElement(By.xpath("//option[@value='jkl']")).isSelected();
+        if(dropdownselected)
+        {
+        	System.out.println("Doc3 is selected from mini dropdown");
+        }
+        else
+        {
+        	System.out.println("Doc3 is NOT selected from mini dropdown");
+        }
         
+        
+        //****************Clear the preloaded text box and enter hello world****************
+        WebElement preloadedText=driver.findElement(By.xpath("//input[@value='Selenium WebDriver']"));
+        preloadedText.clear();
+        String send="Hello World";
+        preloadedText.sendKeys(send);
+        String getsended=preloadedText.getAttribute("value");
+        if(getsended.equals(send))
+        	{
+        	System.out.println("Helo World is added in preloaded Text box");
+        	}
+        else{
+        	System.out.println("Helo World TEST FAILED");
+            }
+        
+        //*********************CLick on enables button***************
+        WebElement button1=driver.findElement(By.xpath("//button[@id='but2']"));
+        button1.click();
+        System.out.println("Enabled button is clicked");
+        
+        //********************Try clicking all three buttons**********
+        for(int i=1;i<=3;i++)
+        {
+        	WebElement buttonsWithSameName=driver.findElement(By.xpath("//button[@name='samename']["+i+"]"));
+        	buttonsWithSameName.click();
+        	System.out.println("Button "+buttonsWithSameName.getText()+"+is Clicked");
+        }
+        
+        //****************Click on this button and handle alert************
+        WebElement alertHandle=driver.findElement(By.xpath("//input[@value='ClickAfterTextDissappears']"));
+        alertHandle.click();
+        driver.switchTo().alert().accept();
+        
+        //***************** Click on Open Popup window***********************
+        //**********And get the text written on the pop up window************
 
+        
+      //Store the ID of the original window
+        String originalWindow = driver.getWindowHandle();
+
+        //Check we don't have other windows open already
+        assert driver.getWindowHandles().size() == 1;
+
+        //Click the link which opens in a new window
+        driver.findElement(By.partialLinkText("Open a popup")).click();
+
+        //Wait for the new window or tab
+        WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.numberOfWindowsToBe(2));
+
+        //Loop through until we find a new window handle
+        for (String windowHandle : driver.getWindowHandles()) {
+            if(!originalWindow.contentEquals(windowHandle)) {
+                driver.switchTo().window(windowHandle);
+                System.out.println("Window is shifted");
+                break;
+            }
+        }
+        driver.manage().timeouts().implicitlyWait(5,TimeUnit.SECONDS);
+        String textNewWindow=driver.findElement(By.xpath("//h2")).getText();
+        System.out.println(textNewWindow);
+        System.out.println("Window is shifted Again to original");
+        driver.manage().timeouts().implicitlyWait(5,TimeUnit.SECONDS);
+        driver.close();
+
+        driver.switchTo().window(originalWindow);
+        
+        driver.findElement(By.xpath("//input[@value='male']")).click();
+        driver.findElement(By.xpath("//input[@value='ClickToGetAlert']")).click();
+        driver.switchTo().alert().accept();
+          
+        driver.findElement(By.xpath("//input[@value='blue']")).click();
+        driver.findElement(By.xpath("//input[@value='orange']")).click();
+        String readText=driver.findElement(By.xpath("//input[@id='rotb']")).getAttribute("value");
+        System.out.println(readText);
+        
+        driver.findElement(By.xpath("//input[@id='prompt']")).click();
+        Alert prompalert=driver.switchTo().alert();
+        prompalert.sendKeys("Usama Hameed");
+        //prompalert.accept();
+        
+        
 	}
 
 }
