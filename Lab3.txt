@@ -1,0 +1,122 @@
+import java.util.List;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.Select;
+
+import io.github.bonigarcia.wdm.WebDriverManager;
+
+public class Lab3 {
+	static WebDriver driver;
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		WebDriverManager.chromedriver().setup();
+		driver=new ChromeDriver();
+		 
+		driver.get("https://omayo.blogspot.in/");
+		String expectedTitle = "omayo (QAFox.com)"; 
+        String actualTitle = driver.getTitle();
+        //Web Page Title Test
+        if (actualTitle.equals(expectedTitle)) {
+            System.out.println("Title test passed. Actual Title: " + actualTitle);
+        } else {
+            System.out.println("Title test failed. Expected Title: " + expectedTitle + ", Actual Title: " + actualTitle);
+        }
+		
+        //*********** Verify Input Value by using Assertions************
+        WebElement inputFirstTextField=driver.findElement(By.xpath("//div[@class='widget-content']//child::textarea[contains(@id,'ta')]"));
+        String sendText="Usama Hameed";
+        inputFirstTextField.clear();
+        inputFirstTextField.sendKeys(sendText);
+        String outputText=inputFirstTextField.getAttribute("value");
+        //System.out.println(sendText);
+        //System.out.println(outputText);
+		
+        if(outputText.equals(sendText))
+        {
+        	System.out.println("Input Value by using Assertions test passed");
+        }
+        else
+        {
+        	System.out.println("Input Value by using Assertions test FAILED");
+        }
+        
+        //*******************Get the Data from table. And print it on the console
+        
+        //Find Number of rows and column of Table
+        
+        List <WebElement> rows=driver.findElements(By.xpath("//table[contains(@id,'table')]//tbody//tr"));
+        int nRow=rows.size();
+        System.out.println(nRow);
+        
+        List<WebElement> column=(List<WebElement>) driver.findElements(By.xpath("//table[contains(@id,'table')]//thead//tr//th"));
+        int ncol=column.size();
+        System.out.println(ncol);
+        
+        //String cellText = driver.findElement(By.xpath("//table[@id='table1']//tbody//tr[1]/td[1]")).getText()+" ";
+       // System.out.print(cellText);
+        
+        for (int i = 1 ; i <= nRow; i++) {
+            for (int j = 1; j <= ncol; j++) {
+                String cellText = driver.findElement(By.xpath("//table[@id='table1']//tbody//tr["+i+"]/td["+j+"]")).getText()+" ";
+                System.out.print(cellText);
+            }
+            System.out.println(); 
+        }
+        
+        
+        //********************Step 3 (Use Assertions)***************** 
+        WebElement username=driver.findElement(By.xpath("//input[@type='text' and @name='userid']"));
+        String sendusername="imusamahameed@gmail.com";
+        
+        username.sendKeys(sendusername);
+        String outputusername=username.getAttribute("value");
+        
+		
+        if(outputusername.equals(sendusername))
+        {
+        	System.out.println("Username input in Login page test passed");
+        }
+        else
+        {
+        	System.out.println("Username input in Login page test FAILED");
+        }
+        WebElement password=driver.findElement(By.xpath("//input[@type='password' and @name='pswrd']"));
+        String sendpassword="hahaha";
+        
+        password.sendKeys(sendpassword);
+        String outputpassword=password.getAttribute("value");
+        
+		
+        if(outputpassword.equals(sendpassword))
+        {
+        	System.out.println("Password enter in Login page test passed");
+        }
+        else
+        {
+        	System.out.println("Passwrod input in Login page test FAILED");
+        }
+        
+        //*********************Select Hyundai and select doc3 as shown in picture.***********
+        Select miniDropdown= new Select(driver.findElement(By.xpath("//select[contains(@id,'multiselect')]")));
+        miniDropdown.selectByVisibleText("Hyundai");
+        boolean name=driver.findElement(By.xpath("//option[@value='Hyundaix']")).isSelected();
+        System.out.println(name);
+        if(name)
+        {
+        	System.out.println("Hyundai is selected from mini dropdown");
+        }
+        else
+        {
+        	System.out.println("Hyundai is NOT selected from mini dropdown");
+        }
+        
+        Select dropdown= new Select(driver.findElement(By.xpath("//select[@class='combobox']")));
+        dropdown.selectByIndex(3);
+        
+
+	}
+
+}
