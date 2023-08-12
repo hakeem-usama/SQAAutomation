@@ -1,0 +1,130 @@
+package test1;
+import java.time.Duration;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+
+import io.github.bonigarcia.wdm.WebDriverManager;
+public class test {
+	static WebDriver driver;
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		WebDriverManager.chromedriver().setup();
+		driver=new ChromeDriver();
+		 String URL="https://omayo.blogspot.in/";
+		driver.get(URL);
+		 WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(10));
+		 Actions builder=new Actions(driver);
+
+		 //**************************Click on try it button then click ob button after wait****************
+		 WebElement trybutton=driver.findElement(By.xpath("//button[text()='Try it']"));
+		
+		 WebElement mybutton=driver.findElement(By.xpath("//button[text()='My Button']"));
+		 boolean status=mybutton.isEnabled();
+		 if(status)
+		 {
+			 System.out.println("Button is enabled and Clickable");
+			 mybutton.click();
+		 }
+		 else
+		 {
+			 System.out.println("Button not Enabled");
+		 }
+		 trybutton.click();
+		 wait.until(ExpectedConditions.not(ExpectedConditions.elementToBeClickable(By.xpath("//button[text()='My Button']"))));
+		 boolean status1=mybutton.isEnabled();
+		 
+		 if(!status1)
+		 {
+			 System.out.println("My Button is not enabled ");
+			 
+		 }
+		 else
+		 {
+			 System.out.println("Button is enabled and Clickable");
+		 }
+		 //*******************double click on the button ‘Double click here’ and handle alert**************
+		 WebElement doubleclic=driver.findElement(By.xpath("//button[text()=' Double click Here   ']"));
+		 builder.moveToElement(doubleclic).doubleClick().perform();
+		 Alert doubleClickAlert= driver.switchTo().alert();
+		 String textAlert=doubleClickAlert.getText();
+		 if(!textAlert.isEmpty())
+		 {
+			 System.out.println(textAlert);
+		 }
+		 else
+		 {
+			 System.out.println("Alert Text not Found");
+		 }
+		 //***************Then click on check this button and wait for the Mr. option to get enabled and click it**************
+		 
+		 doubleClickAlert.accept();
+		 driver.findElement(By.xpath("//button[text()='Check this']")).click();
+		 WebElement checkbox=driver.findElement(By.xpath("//input[@id='dte']"));
+		 wait.until(ExpectedConditions.elementToBeClickable(checkbox));
+		 checkbox.click();
+		 if(checkbox.isSelected())
+		 {
+			 System.out.println("Mr Options Checkbox is enabled and clicked");
+		 }
+		 else
+		 {
+			 System.out.println("Mr Options is not selected");
+		 }
+		 
+		 //***************************Double click on the ‘Double-click’ button and select one option.***************
+		 
+		 WebElement testDoubleClick=driver.findElement(By.xpath("//p[@id='testdoubleclick']"));
+		 builder.moveToElement(testDoubleClick).doubleClick().perform();
+		 
+		 driver.findElement(By.xpath("//a[text()='Facebook']")).click();
+		 wait.until(ExpectedConditions.urlContains("facebook"));
+		 String currentURL=driver.getCurrentUrl();		 
+		 if(!currentURL.equals(URL))
+		 {
+			 System.out.println("Successfully clicked on facebook and navigated to correct website");
+		 }
+		 else
+		 {
+			 
+			 System.out.println("Error Navigating to link");
+			 
+		 }
+		 driver.navigate().back();
+		 
+		 
+		 //**********************click on the green dropdown button and select one option**************
+		 driver.findElement(By.xpath("//button[@class='dropbtn']")).click();	
+		 //driver.findElement(By.xpath("//div[@class='dropdown-content show']"));
+		 wait.until(ExpectedConditions.elementToBeClickable(driver.findElement(By.xpath("//a[text()='Facebook']"))));
+		 driver.findElement(By.xpath("//a[text()='Flipkart']")).click();
+		 wait.until(ExpectedConditions.urlContains("flipkart"));
+		 	 
+		 if(!currentURL.equals(URL))
+		 {
+			 System.out.println("Successfully clicked on Flipkart ");
+		 }
+		 else
+		 {
+			 
+			 System.out.println("Error Navigating to link");
+			 
+		 }
+		 driver.navigate().back();
+		 
+		
+		 
+		
+	}
+}
