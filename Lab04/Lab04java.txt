@@ -1,0 +1,149 @@
+import java.time.Duration;
+import java.util.concurrent.TimeUnit;
+
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
+
+import io.github.bonigarcia.wdm.WebDriverManager;
+
+public class Lab4 {
+	
+	static WebDriver driver;
+	static Logger logger = Logger.getLogger("Lab4");
+	
+	@Test(priority=0)
+	public static void OpenWebPage() {
+		WebDriverManager.chromedriver().setup();
+		PropertyConfigurator.configure("Log4j.properties");
+		
+		driver=new ChromeDriver();
+		driver.get("https://www.globalsqa.com/angularJs-protractor/BankingProject");
+		logger.info("Web Page is Opened");
+	}
+	@Test(priority=1)
+	public static void ManagerLogin()
+	{
+		
+		
+		//driver.manage().timeouts().implicitlyWait(5,TimeUnit.SECONDS);
+		
+		WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(20));		
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[text()='Bank Manager Login']")));
+		WebElement managerLogin=driver.findElement(By.xpath("//button[text()='Bank Manager Login']"));
+		managerLogin.click();
+		logger.info("Manager Logged In");
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[contains(@ng-click,'addCust')]")));
+
+		WebElement addCustommerbtn=driver.findElement(By.xpath("//button[contains(@ng-click,'addCust')]"));
+		addCustommerbtn.click();
+		logger.info("Add customer clicked");
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@placeholder='First Name']")));
+		WebElement firstName=driver.findElement(By.xpath("//input[@placeholder='First Name']"));
+		firstName.sendKeys("Usama");
+		logger.info("First Name Entered");
+		WebElement lastName=driver.findElement(By.xpath("//input[@placeholder='Last Name']"));
+		lastName.sendKeys("Hameed");
+		logger.info("Last Name Entered");
+		WebElement postCode=driver.findElement(By.xpath("//input[@placeholder='Post Code']"));
+		postCode.sendKeys("3241");
+		WebElement addCustmrBtn=driver.findElement(By.xpath("//button[text()='Add Customer']"));
+		addCustmrBtn.click();
+		logger.info("Post Key Entered");
+		driver.switchTo().alert().accept();
+		logger.info("Alert is handeled");
+	}
+	@Test(priority=2)
+	public static void OpenCustomerAccount()
+	{
+		WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(20));
+		WebElement openAcctBtn=driver.findElement(By.xpath("//button[@ng-click='openAccount()']"));
+		openAcctBtn.click();
+		logger.info("Open Account is clicked");
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//select[@ng-model='custId']")));
+		Select customerSelect=new Select(driver.findElement(By.xpath("//select[@ng-model='custId']")));
+		customerSelect.selectByVisibleText("Usama Hameed");
+		logger.info("Usama Hameed Selected");
+		Select currency=new Select(driver.findElement(By.xpath("//select[@ng-model='currency']")));
+		currency.selectByIndex(1);
+		logger.info("Currency Dollar Selected");
+		WebElement processBtn=driver.findElement(By.xpath("//button[text()='Process']"));
+		processBtn.click();
+		logger.info("Process Button Clicked and Account for user is open");
+		driver.switchTo().alert().accept();
+		logger.info("Alert is handeled");
+		
+		
+	}
+	@Test(priority=3)
+	public static void CustomerLogin()
+	{
+		WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(20));
+		WebElement homeBtn=driver.findElement(By.xpath("//button[text()='Home']"));
+		homeBtn.click();
+		logger.info("Go to Home ");
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[text()='Customer Login']")));
+		WebElement customerLoginBtn=driver.findElement(By.xpath("//button[text()='Customer Login']"));
+		customerLoginBtn.click();
+		logger.info("Customer Login is clicked");
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//select[@id='userSelect']")));
+		Select customerSelect=new Select(driver.findElement(By.xpath("//select[@id='userSelect']")));
+		customerSelect.selectByVisibleText("Usama Hameed");
+		logger.info("Usama Hameed Selected");
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[text()='Login']")));
+		WebElement loginBtn=driver.findElement(By.xpath("//button[text()='Login']"));
+		loginBtn.click();
+		logger.info("Successfully Logged IN");
+		
+	}
+	@Test(priority=4)
+	public static void DepositWithdraw()
+	{
+		WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(20));
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[@ng-click='deposit()']")));
+		WebElement depositBtn=driver.findElement(By.xpath("//button[@ng-click='deposit()']"));
+		depositBtn.click();
+		logger.info("Deposit Button Clicked");
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@placeholder='amount']")));
+		WebElement amount=driver.findElement(By.xpath("//input[@placeholder='amount']"));
+		amount.sendKeys("6000");
+		logger.info("Amount Entered");
+		WebElement deopsitBtn=driver.findElement(By.xpath("//button[text()='Deposit']"));
+		deopsitBtn.click();
+		logger.info("Successfully Deposited");
+		
+		WebElement withdrawlBtn=driver.findElement(By.xpath("//button[@ng-click='withdrawl()']"));
+		withdrawlBtn.click();
+		logger.info("Widthdraw Clicked");
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@ng-model='amount']")));
+		WebElement amount1=driver.findElement(By.xpath("//input[@ng-model='amount']"));
+		amount1.sendKeys("2000");
+		driver.manage().timeouts().implicitlyWait(5,TimeUnit.SECONDS);
+		logger.info("Amount Entered");
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[text()='Withdraw']")));
+		WebElement widthdrawBtn=driver.findElement(By.xpath("//button[text()='Withdraw']"));
+		widthdrawBtn.click();
+		logger.info("Successfully Withdrawn");
+		
+		
+	}
+	/*@Test(priority=5)
+	public static void listTransaction()
+	{
+		WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(20));
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[@ng-click='deposit()']")));
+		WebElement transaction=driver.findElement(By.xpath("//button[@ng-click='deposit()']"));
+		transaction.click();
+		logger.info("Deposit Button Clicked");
+	}*/
+	
+	
+}
