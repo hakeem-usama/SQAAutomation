@@ -1,3 +1,4 @@
+package test2;
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
@@ -14,9 +15,7 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
-
-public class Lab4 {
-	
+public class test {
 	static WebDriver driver;
 	static Logger logger = Logger.getLogger("Lab4");
 	
@@ -123,27 +122,83 @@ public class Lab4 {
 		WebElement withdrawlBtn=driver.findElement(By.xpath("//button[@ng-click='withdrawl()']"));
 		withdrawlBtn.click();
 		logger.info("Widthdraw Clicked");
-		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@ng-model='amount']")));
-		WebElement amount1=driver.findElement(By.xpath("//input[@ng-model='amount']"));
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//label[text()='Amount to be Withdrawn :']//following-sibling::input")));
+		WebElement amount1=driver.findElement(By.xpath("//label[text()='Amount to be Withdrawn :']//following-sibling::input"));
 		amount1.sendKeys("2000");
-		driver.manage().timeouts().implicitlyWait(5,TimeUnit.SECONDS);
+		//driver.manage().timeouts().implicitlyWait(5,TimeUnit.SECONDS);
 		logger.info("Amount Entered");
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[text()='Withdraw']")));
 		WebElement widthdrawBtn=driver.findElement(By.xpath("//button[text()='Withdraw']"));
 		widthdrawBtn.click();
+		amount1.sendKeys("1000");
+		widthdrawBtn.click();
 		logger.info("Successfully Withdrawn");
-		
-		
+				
 	}
-	/*@Test(priority=5)
-	public static void listTransaction()
+	@Test(priority=5)
+	public static void listTransaction() throws InterruptedException
 	{
 		WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(20));
-		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[@ng-click='deposit()']")));
-		WebElement transaction=driver.findElement(By.xpath("//button[@ng-click='deposit()']"));
+		
+		WebElement transaction=driver.findElement(By.xpath("//button[@ng-click='transactions()']"));		
 		transaction.click();
-		logger.info("Deposit Button Clicked");
-	}*/
+		logger.info("Transaction Button Clicked");
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//table[@class='table table-bordered table-striped']")));
+		/*List<WebElement> rows = table.findElements(By.xpath(".//tr"));
+        List<List<String>> tableData = new ArrayList<>(); // List of rows
+
+        for (WebElement row : rows) {
+            List<WebElement> columns = row.findElements(By.xpath(".//td"));
+            List<String> rowData = new ArrayList<>(); // List of column data
+
+            for (WebElement column : columns) {
+                rowData.add(column.getText()); // Add each cell data to the row data list
+            }
+
+            tableData.add(rowData); // Add the row data list to the table data list
+        }
+
+        // Now you have your table data stored in the "tableData" list of lists
+        // You can process, print, or manipulate this data as needed
+        for (List<String> rowData : tableData) {
+            for (String cellData : rowData) {
+                System.out.print(cellData + "\t");
+            }
+            System.out.println();
+        }*/
+		
+	}
+	@Test(priority=6)
+	public static void resetTransactions()
+	{
+		WebElement backBtn=driver.findElement(By.xpath("//button[@ng-click='back()']"));
+		backBtn.click();
+		WebElement transaction=driver.findElement(By.xpath("//button[@ng-click='transactions()']"));		
+		transaction.click();
+		WebElement resetBtn=driver.findElement(By.xpath("//button[text()='Reset']"));
+		resetBtn.click();
+		WebElement logoutBtn=driver.findElement(By.xpath("//button[@ng-click='byebye()']"));
+		logoutBtn.click();
+	}
+	@Test(priority=7)
+	public static void deleteCustomer()
+	{
+		WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(20));
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[text()='Home']")));
+		WebElement homeBtn=driver.findElement(By.xpath("//button[@ng-click='home()']"));
+		homeBtn.click();
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[text()='Bank Manager Login']")));
+		WebElement managerLogin=driver.findElement(By.xpath("//button[text()='Bank Manager Login']"));
+		managerLogin.click();
+		logger.info("Manager Logged In");
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[@ng-click='showCust()']")));
+		WebElement customersBtn=driver.findElement(By.xpath("//button[@ng-click='showCust()']"));
+		customersBtn.click();
+		logger.info("Customers Clicked");
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//td[text()='Usama']//following-sibling::td//following-sibling::td//following-sibling::td//following-sibling::td//child::button")));
+		WebElement deleteBtn=driver.findElement(By.xpath("//td[text()='Usama']//following-sibling::td//following-sibling::td//following-sibling::td//following-sibling::td//child::button"));
+		deleteBtn.click();
+		logger.info("Usama Hameed Deleted");
 	
-	
+	}
 }
